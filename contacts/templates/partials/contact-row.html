@@ -1,0 +1,15 @@
+<tr class="py-24">
+    <td>{{contact.name}}</td>
+    <td>{{contact.email}}</td>
+    <td>{{contact.created_at|date:"M d, Y"}}</td>
+    <td>
+        {% if contact.document %}
+            <a href="{{ contact.document_url }}" class="btn btn-ghost btn-xs" target="_blank">View Document</a>
+        {% else %}
+            No document
+        {% endif %}
+    </td>
+    <td>
+        <button class="btn btn-error btn-xs" >Delete</button>
+    </td>
+</tr>

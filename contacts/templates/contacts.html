@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+</form>
+
+<div>
+    <h1 class="text-4xl text-success mb-4">Contact Manager</h1>
+    <button class="btn btn-primary mb-4" onclick="contact_modal.showModal()">Add new contact</button>
+
+        {% include 'partials/add-contact-modal.html' %}
+
+        <label class="input input-bordered flex items-center gap-2 mb-2">
+       
+        <input type="search" class="grow" placeholder="Search" name = "search" 
+{#        {% comment %} here we add htmx {% endcomment %}#}
+{#        {% comment %} the div to replace it will go in here, the id tho {% endcomment %}#}
+        
+        {% comment %} hx indicator will be used or spinners, ,ot of thiese things need id {% endcomment %}
+       {% comment %} for controlling opacity before the result is displayed {% endcomment %}
+        
+        <input type="search" class="grow" placeholder="Search" name="search" 
+         hx-get="{% url 'search' %}"
+         hx-trigger="keyup changed delay:500ms"
+         hx-target="#contacts-list" 
+         hx-push-url="false"
+         hx-indicator="#spinner"
+         hx-on::before-request="document.getElementById('contacts-list').style.opacity=0.4;"
+         hx-on::after-request="document.getElementById('contacts-list').style.opacity=1.0;"
+         hx-on::input="if (this.value.trim() === '') { htmx.trigger(this, 'clear-search') }"
+     />
+         <div hx-get="{% url 'search' %}" hx-trigger="clear-search" hx-target="#contacts-list"></div>
+
+        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+    
+      </label>
+        {% include "partials/spinner.html" %}
+     {% include "partials/contact-list.html" %}
+</div>
+
+
+{% comment %} now we need to handle the formvalidation modal  wth js to trigger hands fee{% endcomment %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.addEventListener('fail', () => {
+            console.log("Validation failed, showing modal...");
+            document.getElementById("contact_modal").showModal();
+        });
+
+        document.body.addEventListener('success', () => {
+            let firstContactDiv = document.querySelector(',no-contact-row');
+            if (firstContactDiv){
+                firstContactDiv.remove();
+            }
+        })
+    });
+</script>
+{% comment %} for the search {% endcomment %}
+<script>
+    document.addEventListener("htmx:afterRequest", (event) => {
+        if (event.detail.path.startsWith("/search/")) {
+            history.replaceState({}, "", "/search/");
+        }
+    });
+
+  
+</script>
+
+{% endblock %}
