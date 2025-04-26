@@ -1,5 +1,5 @@
 databases:
-  - name: cpntactdb
+  - name: contactdb
     plan: free
     databaseName: contacts_db
     user: contacthub_user
