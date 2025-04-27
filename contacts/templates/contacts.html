@@ -49,7 +49,7 @@
         });
 
         document.body.addEventListener('success', () => {
-            let firstContactDiv = document.querySelector(',no-contact-row');
+            let firstContactDiv = document.querySelector('.no-contact-row');
             if (firstContactDiv){
                 firstContactDiv.remove();
             }
@@ -66,5 +66,8 @@
 
   
 </script>
+<script>
+    htmx.config.headers['X-CSRFToken'] = '{{ csrf_token }}';
+  </script>
 
 {% endblock %}

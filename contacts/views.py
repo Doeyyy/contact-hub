@@ -145,12 +145,12 @@ def create_contact(request):
 
 
 #  acoording to the video   
-# @login_required
-# @require_http_methods(['DELETE'])
-# def deletecontact(request, pk):
-#     contact = get_object_or_404(Contact, pk =pk , user =request.user)
-#     contact.delete()
-#     response = HttpResponse(status =204)
-#     response['Hx-Trigger'] = 'contact-deleted'
-#     return response
+@login_required
+@require_http_methods(['DELETE'])
+def deletecontact(request, pk):
+    contact = get_object_or_404(Contact, pk =pk , user =request.user)
+    contact.delete()
+    response = HttpResponse(status =204)
+    response['HX-Trigger'] = 'contact-deleted'
+    return response
 
